@@ -1,4 +1,4 @@
-package br.edu.ifpr.dao;
+package br.edu.ifpr.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

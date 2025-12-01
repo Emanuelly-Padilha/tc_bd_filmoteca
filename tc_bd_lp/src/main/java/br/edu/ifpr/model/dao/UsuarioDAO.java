@@ -1,4 +1,4 @@
-package br.edu.ifpr.dao;
+package br.edu.ifpr.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,30 +11,58 @@ import br.edu.ifpr.model.Usuario;
 
 public class UsuarioDAO {
     
-    // Método para cadastrar um novo usuário
-    public void inserir(Usuario u) { 
-        String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
-
+    public void inserir(Usuario u) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
         try {
-            Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            conn = ConnectionFactory.getConnection();
+            if (conn == null) {
+                System.out.println("❌ Não conectou ao banco!");
+                return;
+            }
+            
+            String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+            ps = conn.prepareStatement(sql);
             
             ps.setString(1, u.getNome());
             ps.setString(2, u.getEmail());
             ps.setString(3, u.getSenha());
             
-            ps.executeUpdate();
+            // EXECUTAR INSERT
+            int linhas = ps.executeUpdate();
+            System.out.println("📊 Linhas afetadas: " + linhas);
             
-            System.out.println("Usuário cadastrado: " + u.getNome());
+            // ⭐⭐ FORÇAR COMMIT (SALVAR NO BANCO) ⭐⭐
+            conn.commit();
+            System.out.println("💾 Dados SALVOS permanentemente!");
             
-            ps.close();
-            conn.close();
-
+            // Verificar se realmente salvou
+            if (linhas > 0) {
+                System.out.println("✅ Usuário '" + u.getNome() + "' salvo no MySQL!");
+            }
+            
         } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar usuário: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+            System.out.println("❌ Erro SQL: " + e.getMessage());
+            
+            // Se der erro, desfazer (rollback)
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException e2) {
+                System.out.println("❌ Erro no rollback: " + e2.getMessage());
+            }
+            
+        } finally {
+            // Fechar conexões
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.out.println("⚠️ Erro ao fechar: " + e.getMessage());
+            }
+    } 
+     
+}
 
     public int buscarIdPorNome(String nome) {
         String sql = "SELECT id FROM usuarios WHERE nome = ?";
@@ -139,3 +167,4 @@ public class UsuarioDAO {
     
     
 }
+    

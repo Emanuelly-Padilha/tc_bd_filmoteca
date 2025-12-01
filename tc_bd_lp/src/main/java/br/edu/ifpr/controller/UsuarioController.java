@@ -2,8 +2,8 @@ package br.edu.ifpr.controller;
 
 import java.util.List;
 
-import br.edu.ifpr.dao.UsuarioDAO;
 import br.edu.ifpr.model.Usuario;
+import br.edu.ifpr.model.dao.UsuarioDAO;
 
 public class UsuarioController {
     
@@ -20,7 +20,6 @@ public class UsuarioController {
         return dao.listar();
     }
 
-    // Método para fazer login - NÃO É MAIS 'static'
     public  Usuario login(String email, String senha) {
         // Chama o método login do DAO
         return dao.login(email, senha);

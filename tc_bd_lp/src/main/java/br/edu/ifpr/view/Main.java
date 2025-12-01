@@ -86,8 +86,6 @@ public class Main {
         System.out.print("Digite sua senha: ");
         String senha = sc.nextLine();
         
-        // Usar o método login do controlador
-        usuarioLogado = UsuarioController.login(email, senha);
         
         if(usuarioLogado != null) {
             System.out.println("Login realizado com sucesso!");

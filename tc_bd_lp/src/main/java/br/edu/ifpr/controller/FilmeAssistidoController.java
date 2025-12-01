@@ -2,8 +2,8 @@ package br.edu.ifpr.controller;
 
 import java.util.List;
 
-import br.edu.ifpr.dao.FilmeAssistidoDAO;
 import br.edu.ifpr.model.FilmeAssistido;
+import br.edu.ifpr.model.dao.FilmeAssistidoDAO;
 
 public class FilmeAssistidoController {
     
