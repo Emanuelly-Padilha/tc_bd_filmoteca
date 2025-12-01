@@ -18,7 +18,7 @@ public class UsuarioDAO {
         try {
             conn = ConnectionFactory.getConnection();
             if (conn == null) {
-                System.out.println("❌ Não conectou ao banco!");
+                System.out.println("Não conectou no banco");
                 return;
             }
             
@@ -29,27 +29,27 @@ public class UsuarioDAO {
             ps.setString(2, u.getEmail());
             ps.setString(3, u.getSenha());
             
-            // EXECUTAR INSERT
+            //executa o insert
             int linhas = ps.executeUpdate();
-            System.out.println("📊 Linhas afetadas: " + linhas);
+            System.out.println("Linhas afetadas: " + linhas);
             
-            // ⭐⭐ FORÇAR COMMIT (SALVAR NO BANCO) ⭐⭐
+            //forcar o banco
             conn.commit();
-            System.out.println("💾 Dados SALVOS permanentemente!");
+            System.out.println("Dados salvos");
             
             // Verificar se realmente salvou
             if (linhas > 0) {
-                System.out.println("✅ Usuário '" + u.getNome() + "' salvo no MySQL!");
+                System.out.println("Usuário '" + u.getNome() + "' salvo no MySQL");
             }
             
         } catch (SQLException e) {
-            System.out.println("❌ Erro SQL: " + e.getMessage());
+            System.out.println("Erro SQL: " + e.getMessage());
             
             // Se der erro, desfazer (rollback)
             try {
                 if (conn != null) conn.rollback();
             } catch (SQLException e2) {
-                System.out.println("❌ Erro no rollback: " + e2.getMessage());
+                System.out.println("Erro no rollback: " + e2.getMessage());
             }
             
         } finally {
@@ -58,7 +58,7 @@ public class UsuarioDAO {
                 if (ps != null) ps.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
-                System.out.println("⚠️ Erro ao fechar: " + e.getMessage());
+                System.out.println("Erro ao fechar: " + e.getMessage());
             }
     } 
      
