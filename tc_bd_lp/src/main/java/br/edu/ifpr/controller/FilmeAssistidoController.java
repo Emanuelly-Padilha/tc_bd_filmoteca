@@ -2,12 +2,12 @@ package br.edu.ifpr.controller;
 
 import java.util.List;
 
-import br.edu.ifpr.dao.FilmeAsssitidoDAO;
+import br.edu.ifpr.dao.FilmeAssistidoDAO;
 import br.edu.ifpr.model.FilmeAssistido;
 
 public class FilmeAssistidoController {
     
-    FilmeAssistidoDAO dao = new FilmeAsssitidoDAO();
+    FilmeAssistidoDAO dao = new FilmeAssistidoDAO();
 
     public void registrar(FilmeAssistido fa) {
         dao.inserir(fa);
