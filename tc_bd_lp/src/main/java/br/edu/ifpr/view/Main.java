@@ -111,7 +111,7 @@ public class Main {
         System.out.print("Digite sua senha: ");
         String senha = sc.nextLine();
 
-        Usuario novoUsuario = new Usuario(nome, email, senha);
+        Usuario novoUsuario = new Usuario( nome, email, senha);
         usuarioController.cadastrar(novoUsuario);
 
         System.out.println("Conta criada com sucesso! Agora faça login.");

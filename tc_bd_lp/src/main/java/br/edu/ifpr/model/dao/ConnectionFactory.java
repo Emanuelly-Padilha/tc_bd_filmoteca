@@ -8,11 +8,13 @@ public class ConnectionFactory {
     
    
     public static Connection getConnection()throws SQLException{
-        String url = "jdbc:mysql://localhost:3306/tc_bd_filmoteca";
+        String url = "jdbc:mysql://aluno@127.0.0.1:3306/tc_bd_filmoteca";
         String user = "aluno";
         String password = "aluno";
-        return DriverManager.getConnection(url, user, password);
 
+         
+        return DriverManager.getConnection(url, user, password);
+   
 
     }
 

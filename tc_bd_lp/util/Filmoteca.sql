@@ -1,7 +1,7 @@
 
-CREATE DATABASE filmoteca;
+CREATE DATABASE tc_bd_filmoteca;
 
-USE filmoteca;
+USE tc_bd_filmoteca;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
