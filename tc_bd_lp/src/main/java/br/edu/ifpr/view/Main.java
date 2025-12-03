@@ -31,17 +31,17 @@ public class Main {
         System.out.println();
         System.out.println(
                 "░▒▓████████▓▒░▒▓█▓▒░▒▓█▓▒░      ░▒▓██████████████▓▒░ ░▒▓██████▓▒░▒▓████████▓▒░▒▓████████▓▒░▒▓██████▓▒░ ░▒▓██████▓▒░  \n"
-                        + //
+                        +
                         "░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ \n"
-                        + //
+                        +
                         "░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ \n"
-                        + //
+                        +
                         "░▒▓██████▓▒░ ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓██████▓▒░░▒▓█▓▒░      ░▒▓████████▓▒░ \n"
-                        + //
+                        +
                         "░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ \n"
-                        + //
+                        +
                         "░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ \n"
-                        + //
+                        +
                         "░▒▓█▓▒░      ░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░  ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░");
         System.out.println();
         telaLogin();
@@ -85,12 +85,14 @@ public class Main {
     }
 
     private static void fazerLogin() {
-        System.out.println("\n--- FAZER LOGIN ---");
+        System.out.println("\n=== FAZER LOGIN ===");
         System.out.print("Digite seu email: ");
         String email = sc.nextLine();
 
         System.out.print("Digite sua senha: ");
         String senha = sc.nextLine();
+
+        usuarioLogado = usuarioController.login(email, senha);
 
         if (usuarioLogado != null) {
             System.out.println("Login realizado com sucesso!");
@@ -101,7 +103,7 @@ public class Main {
     }
 
     private static void criarConta() {
-        System.out.println("\n--- CRIAR NOVA CONTA ---");
+        System.out.println("\n=== CRIAR NOVA CONTA ===");
         System.out.print("Digite seu nome: ");
         String nome = sc.nextLine();
 
@@ -111,7 +113,7 @@ public class Main {
         System.out.print("Digite sua senha: ");
         String senha = sc.nextLine();
 
-        Usuario novoUsuario = new Usuario( nome, email, senha);
+        Usuario novoUsuario = new Usuario(nome, email, senha);
         usuarioController.cadastrar(novoUsuario);
 
         System.out.println("Conta criada com sucesso! Agora faça login.");
@@ -124,8 +126,8 @@ public class Main {
             System.out.println("\n=== MENU PRINCIPAL ===");
             System.out.println("Usuário: " + usuarioLogado.getNome());
             System.out.println("------------------------");
-            System.out.println("1 - Gerenciar Usuários");
-            System.out.println("2 - Gerenciar Filmes");
+            System.out.println("1 - Minha Conta");
+            System.out.println("2 - Meus Filmes");
             System.out.println("3 - Minha Watchlist");
             System.out.println("4 - Minhas Avaliações");
             System.out.println("5 - Filmes Assistidos");
@@ -167,6 +169,7 @@ public class Main {
         do {
             System.out.println("\n=== MENU USUÁRIOS ===");
             System.out.println("1 - Listar todos os usuários");
+            System.out.println("2 - Remover usuário do sistema");
             System.out.println("0 - Voltar ao menu anterior");
             System.out.print("Escolha uma opção: ");
 
@@ -175,6 +178,8 @@ public class Main {
 
             if (opcao == 1) {
                 listarUsuarios();
+            } else if (opcao == 2) {
+                removerUsuario();
             } else if (opcao != 0) {
                 System.out.println("Opção inválida! Digite 0 ou 1.");
             }
@@ -183,7 +188,7 @@ public class Main {
     }
 
     private static void listarUsuarios() {
-        System.out.println("\n--- LISTA DE USUÁRIOS ---");
+        System.out.println("\n=== LISTA DE USUÁRIOS ===");
         List<Usuario> listaUsuarios = usuarioController.listar();
 
         if (listaUsuarios.isEmpty()) {
@@ -197,6 +202,97 @@ public class Main {
         }
     }
 
+    private static void removerUsuario() {
+        System.out.println("\n=== REMOVER USUÁRIO DO SISTEMA ===");
+
+        List<Usuario> usuariosCadastrados = usuarioController.listar();
+
+        if (usuariosCadastrados.isEmpty()) {
+            System.out.println("Não há usuários cadastrados no sistema.");
+            return;
+        }
+
+        System.out.println("Usuários cadastrados no sistema:");
+
+        int contador = 0;
+        for (int i = 0; i < usuariosCadastrados.size(); i++) {
+            Usuario usuario = usuariosCadastrados.get(i);
+
+            if (usuarioLogado != null && usuario.getId() == usuarioLogado.getId()) {
+                continue;
+            }
+
+            System.out.println((contador + 1) + " - " + usuario.getNome() +
+                    " | Email: " + usuario.getEmail());
+            contador++;
+        }
+
+        if (contador == 0) {
+            System.out.println("Só existe você cadastrado no sistema.");
+            return;
+        }
+
+        System.out.print("\nDigite o número do usuário que deseja remover: ");
+
+        try {
+            String entrada = sc.nextLine();
+            int opcao = Integer.parseInt(entrada);
+
+            if (opcao < 1 || opcao > contador) {
+                System.out.println("Opção inválida! Escolha um número da lista.");
+                return;
+            }
+
+            int indexReal = -1;
+            int contadorLista = 0;
+            for (int i = 0; i < usuariosCadastrados.size(); i++) {
+                Usuario usuario = usuariosCadastrados.get(i);
+
+                if (usuarioLogado != null && usuario.getId() == usuarioLogado.getId()) {
+                    continue;
+                }
+
+                contadorLista++;
+                if (contadorLista == opcao) {
+                    indexReal = i;
+                    break;
+                }
+            }
+
+            if (indexReal == -1) {
+                System.out.println("Erro ao encontrar usuário.");
+                return;
+            }
+
+            String nomeUsuario = usuariosCadastrados.get(indexReal).getNome();
+            String emailUsuario = usuariosCadastrados.get(indexReal).getEmail();
+
+            System.out.println("\n=== ATENÇÃO ===");
+            System.out.println("Você está prestes a remover o usuário:");
+            System.out.println("Nome: " + nomeUsuario);
+            System.out.println("Email: " + emailUsuario);
+            System.out.println("\nIsso irá remover TODOS os dados relacionados:");
+            System.out.println("- Todas as avaliações feitas por este usuário");
+            System.out.println("- Watchlist do usuário");
+            System.out.println("- Histórico de filmes assistidos");
+            System.out.println("- Conta do usuário");
+            System.out.println("\nEsta operação NÃO pode ser desfeita!");
+
+            System.out.print("\nDigite 'CONFIRMAR' para prosseguir ou qualquer coisa para cancelar: ");
+            String confirmacao = sc.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("CONFIRMAR")) {
+                usuarioController.remover(nomeUsuario);
+                System.out.println("Operação concluída.");
+            } else {
+                System.out.println("Operação cancelada.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro! Digite apenas números.");
+        }
+    }
+
     private static void menuFilmes() {
         int opcao;
 
@@ -204,11 +300,19 @@ public class Main {
             System.out.println("\n=== MENU FILMES ===");
             System.out.println("1 - Cadastrar novo filme");
             System.out.println("2 - Listar todos os filmes");
+            System.out.println("3 - Remover filme do sistema");
             System.out.println("0 - Voltar ao menu anterior");
             System.out.print("Escolha uma opção: ");
 
-            opcao = sc.nextInt();
-            sc.nextLine();
+            String entrada = sc.nextLine();
+
+            try {
+                opcao = Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida! Digite um número.");
+                opcao = -1;
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
@@ -217,17 +321,20 @@ public class Main {
                 case 2:
                     listarFilmes();
                     break;
+                case 3:
+                    removerFilme();
+                    break;
                 case 0:
                     break;
                 default:
-                    System.out.println("Opção inválida! Digite 0, 1 ou 2.");
+                    System.out.println("Opção inválida! Digite 0, 1, 2 ou 3.");
             }
 
         } while (opcao != 0);
     }
 
     private static void cadastrarFilme() {
-        System.out.println("\n--- CADASTRAR FILME ---");
+        System.out.println("\n=== CADASTRAR FILME ===");
 
         System.out.print("Título do filme: ");
         String titulo = sc.nextLine();
@@ -249,7 +356,7 @@ public class Main {
         System.out.print("Classificação etária (ex: Livre, 12 anos, 16 anos): ");
         String classificacao = sc.nextLine();
 
-        Filme novoFilme = new Filme(titulo, genero, ano, diretor, duracao, classificacao);
+        Filme novoFilme = new Filme(titulo, ano, genero, diretor, duracao, classificacao);
         filmeController.cadastrar(novoFilme);
 
         System.out.println("Filme cadastrado com sucesso!");
@@ -277,6 +384,52 @@ public class Main {
         }
     }
 
+    private static void removerFilme() {
+        System.out.println("\n=== REMOVER FILME DO SISTEMA ===");
+
+        List<Filme> filmesCadastrados = filmeController.listar();
+
+        if (filmesCadastrados.isEmpty()) {
+            System.out.println("Não há filmes cadastrados no sistema.");
+            return;
+        }
+
+        System.out.println("Filmes cadastrados no sistema:");
+        for (int i = 0; i < filmesCadastrados.size(); i++) {
+            Filme filme = filmesCadastrados.get(i);
+            System.out.println((i + 1) + " - " + filme.getTitulo() +
+                    " (" + filme.getAno() + ")");
+        }
+
+        System.out.print("\nDigite o número do filme que deseja remover: ");
+
+        try {
+
+            String entrada = sc.nextLine();
+            int opcao = Integer.parseInt(entrada);
+
+            if (opcao < 1 || opcao > filmesCadastrados.size()) {
+                System.out.println("Opção inválida! Escolha um número da lista.");
+                return;
+            }
+
+            String tituloFilme = filmesCadastrados.get(opcao - 1).getTitulo();
+
+            System.out.println("\nATENÇÃO: Esta operação não pode ser desfeita!");
+            System.out.print("Tem certeza que deseja remover \"" + tituloFilme + "\"? (S/N): ");
+            String confirmacao = sc.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("S")) {
+                filmeController.remover(tituloFilme);
+            } else {
+                System.out.println("Operação cancelada.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro! Digite apenas números.");
+        }
+    }
+
     private static void menuWatchlist() {
         int opcao;
 
@@ -284,6 +437,7 @@ public class Main {
             System.out.println("\n=== MINHA WATCHLIST ===");
             System.out.println("1 - Adicionar filme à watchlist");
             System.out.println("2 - Ver minha watchlist");
+            System.out.println("3 - Remover filme da watchlist");
             System.out.println("0 - Voltar ao menu anterior");
             System.out.print("Escolha uma opção: ");
 
@@ -297,6 +451,9 @@ public class Main {
                 case 2:
                     verWatchlist();
                     break;
+                case 3:
+                    removerDaWatchlist();
+                    break;
                 case 0:
                     break;
                 default:
@@ -308,6 +465,7 @@ public class Main {
 
     private static void adicionarWatchlist() {
         System.out.println("\n--- ADICIONAR À WATCHLIST ---");
+
         System.out.print("Nome do filme que deseja assistir: ");
         String nomeFilme = sc.nextLine();
 
@@ -318,7 +476,7 @@ public class Main {
     }
 
     private static void verWatchlist() {
-        System.out.println("\n--- MINHA WATCHLIST ---");
+        System.out.println("\n=== MINHA WATCHLIST ===");
         List<Watchlist> minhaWatchlist = watchlistController.listar(usuarioLogado.getNome());
 
         if (minhaWatchlist.isEmpty()) {
@@ -333,12 +491,59 @@ public class Main {
         }
     }
 
+    private static void removerDaWatchlist() {
+        System.out.println("\n=== REMOVER DA WATCHLIST ===");
+
+        List<Watchlist> minhaWatchlist = watchlistController.listar(usuarioLogado.getNome());
+
+        if (minhaWatchlist.isEmpty()) {
+            System.out.println("Sua watchlist está vazia.");
+            return;
+        }
+
+        System.out.println("Sua watchlist atual:");
+        for (int i = 0; i < minhaWatchlist.size(); i++) {
+            Watchlist item = minhaWatchlist.get(i);
+            System.out.println((i + 1) + " - " + item.getNomeFilme());
+        }
+
+        System.out.print("\nDigite o número do filme que deseja remover: ");
+
+        try {
+            int opcao = sc.nextInt();
+            sc.nextLine();
+
+            if (opcao < 1 || opcao > minhaWatchlist.size()) {
+                System.out.println("Opção inválida! Escolha um número da lista.");
+                return;
+            }
+
+            String nomeFilme = minhaWatchlist.get(opcao - 1).getNomeFilme();
+
+            System.out.print("Tem certeza que deseja remover \"" + nomeFilme + "\"? (S/N): ");
+            String confirmacao = sc.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("S")) {
+                Watchlist item = new Watchlist(usuarioLogado.getNome(), nomeFilme);
+                watchlistController.remover(item);
+
+            } else {
+                System.out.println("Operação cancelada.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro! Digite apenas números.");
+            sc.nextLine();
+        }
+    }
+
     private static void menuAvaliacoes() {
         int opcao;
 
         do {
             System.out.println("\n=== MINHAS AVALIAÇÕES ===");
             System.out.println("1 - Avaliar um filme");
+            System.out.println("2 - Listar avaliações");
             System.out.println("0 - Voltar ao menu anterior");
             System.out.print("Escolha uma opção: ");
 
@@ -347,6 +552,8 @@ public class Main {
 
             if (opcao == 1) {
                 avaliarFilme();
+            } else if (opcao == 2) {
+                listarMinhasAvaliacoes();
             } else if (opcao != 0) {
                 System.out.println("Opção inválida! Digite 0 ou 1.");
             }
@@ -355,10 +562,26 @@ public class Main {
     }
 
     private static void avaliarFilme() {
-        System.out.println("\n--- AVALIAR FILME ---");
+        System.out.println("\n=== AVALIAR FILME ===");
 
         System.out.print("Nome do filme que você quer avaliar: ");
         String nomeFilme = sc.nextLine();
+
+        List<FilmeAssistido> filmesAssistidos = assistidoController.listar(usuarioLogado.getNome());
+        boolean filmeAssistido = false;
+
+        for (FilmeAssistido fa : filmesAssistidos) {
+            if (fa.getNomeFilme().equalsIgnoreCase(nomeFilme)) {
+                filmeAssistido = true;
+                break;
+            }
+        }
+
+        if (!filmeAssistido) {
+            System.out.println("Você não pode avaliar este filme!");
+            System.out.println("Primeiro assista ao filme e registre no menu 'Filmes Assistidos'.");
+            return;
+        }
 
         System.out.print("Nota (de 1 a 10, onde 10 é excelente): ");
         int nota = sc.nextInt();
@@ -373,11 +596,32 @@ public class Main {
         String review = sc.nextLine();
 
         Avaliacao avaliacao = new Avaliacao(usuarioLogado.getNome(), nomeFilme, nota, review);
-
         avaliacaoController.avaliar(avaliacao);
 
         System.out.println("Avaliação registrada com sucesso!");
         System.out.println("Obrigado por compartilhar sua opinião!");
+    }
+
+    private static void listarMinhasAvaliacoes() {
+        System.out.println("\n=== MINHAS AVALIAÇÕES ===");
+        List<Avaliacao> minhasAvaliacoes = avaliacaoController.listarPorUsuario(usuarioLogado.getNome());
+
+        if (minhasAvaliacoes.isEmpty()) {
+            System.out.println("Você ainda não fez nenhuma avaliação.");
+            System.out.println("Avalie um filme no menu 'Minhas Avaliações'!");
+        } else {
+            System.out.println("Suas avaliações:");
+            System.out.println("========================================");
+
+            for (Avaliacao av : minhasAvaliacoes) {
+                System.out.println("Filme: " + av.getNomeFilme());
+                System.out.println("Nota: " + av.getNota() + "/10");
+                System.out.println("Opinião: " + av.getReview());
+                System.out.println("========================================");
+            }
+
+            System.out.println("Total: " + minhasAvaliacoes.size() + " avaliação(ões)");
+        }
     }
 
     private static void menuFilmesAssistidos() {
@@ -410,23 +654,22 @@ public class Main {
     }
 
     private static void registrarFilmeAssistido() {
-        System.out.println("\n--- REGISTRAR FILME ASSISTIDO ---");
+        System.out.println("\n=== REGISTRAR FILME ASSISTIDO ===");
 
         System.out.print("Nome do filme que você assistiu: ");
         String nomeFilme = sc.nextLine();
 
-        System.out.print("Data que assistiu (formato: dia/mês/ano, ex: 15/11/2024): ");
+        System.out.print("Data que assistiu (formato: ano/mês/dia, ex: 2009/07/10): ");
         String data = sc.nextLine();
 
         FilmeAssistido filme = new FilmeAssistido(usuarioLogado.getNome(), nomeFilme, data);
 
         assistidoController.registrar(filme);
 
-        System.out.println("Filme registrado como assistido!");
     }
 
     private static void verFilmesAssistidos() {
-        System.out.println("\n--- MEUS FILMES ASSISTIDOS ---");
+        System.out.println("\n=== MEUS FILMES ASSISTIDOS ===");
         List<FilmeAssistido> meusFilmes = assistidoController.listar(usuarioLogado.getNome());
 
         if (meusFilmes.isEmpty()) {

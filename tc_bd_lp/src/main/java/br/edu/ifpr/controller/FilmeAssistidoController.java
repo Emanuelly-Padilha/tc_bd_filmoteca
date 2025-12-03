@@ -6,7 +6,7 @@ import br.edu.ifpr.model.FilmeAssistido;
 import br.edu.ifpr.model.dao.FilmeAssistidoDAO;
 
 public class FilmeAssistidoController {
-    
+
     FilmeAssistidoDAO dao = new FilmeAssistidoDAO();
 
     public void registrar(FilmeAssistido fa) {

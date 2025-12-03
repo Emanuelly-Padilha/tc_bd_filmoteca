@@ -6,7 +6,7 @@ import br.edu.ifpr.model.Filme;
 import br.edu.ifpr.model.dao.FilmeDAO;
 
 public class FilmeController {
-      FilmeDAO dao = new FilmeDAO();
+    FilmeDAO dao = new FilmeDAO();
 
     public void cadastrar(Filme f) {
         dao.inserir(f);
@@ -14,5 +14,9 @@ public class FilmeController {
 
     public List<Filme> listar() {
         return dao.listar();
+    }
+
+    public void remover(String tituloFilme) {
+        dao.remover(tituloFilme);
     }
 }

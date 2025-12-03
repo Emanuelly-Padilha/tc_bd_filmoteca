@@ -16,98 +16,117 @@ public class FilmeAssistidoDAO {
     FilmeDAO filmeDAO = new FilmeDAO();
 
     public void inserir(FilmeAssistido fa) {
-    // Primeiro busca o usuário
-    Usuario usuario = usuarioDAO.buscarPorNome(fa.getNomeUsuario());
-    
-    // Verifica se encontrou o usuário
-    if (usuario == null) {
-        System.out.println("Erro: Usuário não encontrado: " + fa.getNomeUsuario());
-        return;
-    }
-    
-    int usuarioId = usuario.getId(); // Agora pega o ID
-    int filmeId = filmeDAO.buscarIdPorTitulo(fa.getNomeFilme());
 
-    String sql = "INSERT INTO filmes_assistidos (id_usuario, id_filme, data_assistido) VALUES (?, ?, ?)";
+        Usuario usuario = usuarioDAO.buscarPorNome(fa.getNomeUsuario());
 
-    try {
-        Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setInt(1, usuarioId);
-        ps.setInt(2, filmeId);
-        ps.setString(3, fa.getDataAssistido());
-
-        int linhasAfetadas = ps.executeUpdate();
-
-        if (linhasAfetadas > 0) {
-            System.out.println("Filme registrado como assistido: " + fa.getNomeFilme());
+        if (usuario == null) {
+            System.out.println("Erro: Usuário não encontrado: " + fa.getNomeUsuario());
+            return;
         }
 
-        ps.close();
-        conn.close();
+        int usuarioId = usuario.getId();
+        int filmeId = filmeDAO.buscarIdPorTitulo(fa.getNomeFilme());
 
-    } catch (SQLException e) {
-        System.out.println("Erro ao registrar filme assistido: " + e.getMessage());
-        e.printStackTrace();
+        String sql = "INSERT INTO filmes_assistidos (id_usuario, id_filme, data_assistido) VALUES (?, ?, ?)";
+
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, usuarioId);
+            ps.setInt(2, filmeId);
+            ps.setString(3, fa.getDataAssistido());
+
+            int linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Filme registrado como assistido: " + fa.getNomeFilme());
+                removerDaWatchlist(usuarioId, filmeId);
+            }
+
+            ps.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao registrar filme assistido: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-}
 
-public List<FilmeAssistido> listar(String nomeUsuario) {
+    public List<FilmeAssistido> listar(String nomeUsuario) {
 
-    // Primeiro busca o usuário
-    Usuario usuario = usuarioDAO.buscarPorNome(nomeUsuario);
-    
-    // Verifica se encontrou o usuário
-    if (usuario == null) {
-        System.out.println("Erro: Usuário não encontrado: " + nomeUsuario);
-        return new ArrayList<>(); // Retorna lista vazia
-    }
-    
-    int usuarioId = usuario.getId(); // Agora pega o ID
-    
-    List<FilmeAssistido> lista = new ArrayList<FilmeAssistido>();
+        Usuario usuario = usuarioDAO.buscarPorNome(nomeUsuario);
 
-    // buscar filmes assistidos
-    String sql = "SELECT f.titulo AS filme, fa.data_assistido " +
-            "FROM filmes_assistidos fa " +
-            "JOIN filmes f ON f.id = fa.id_filme " +
-            "WHERE fa.id_usuario = ? " +
-            "ORDER BY fa.data_assistido DESC";
-
-    try {
-        Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        // coloca o id usuario no sql
-        ps.setInt(1, usuarioId);
-
-        // executar consulta
-        ResultSet rs = ps.executeQuery();
-
-        int contador = 0;
-        while (rs.next()) {
-            String nomeFilme = rs.getString("filme");
-            String dataAssistido = rs.getString("data_assistido");
-
-            FilmeAssistido filme = new FilmeAssistido(nomeUsuario, nomeFilme, dataAssistido);
-
-            lista.add(filme);
-            contador++;
+        if (usuario == null) {
+            System.out.println("Erro: Usuário não encontrado: " + nomeUsuario);
+            return new ArrayList<>();
         }
 
-        System.out.println("Encontrados " + contador + " filmes assistidos para " + nomeUsuario);
+        int usuarioId = usuario.getId();
 
-        rs.close();
-        ps.close();
-        conn.close();
+        List<FilmeAssistido> lista = new ArrayList<FilmeAssistido>();
 
-    } catch (SQLException e) {
-        System.out.println("Erro ao listar filmes assistidos: " + e.getMessage());
-        e.printStackTrace();
+        String sql = "SELECT f.titulo AS filme, fa.data_assistido " +
+                "FROM filmes_assistidos fa " +
+                "JOIN filmes f ON f.id = fa.id_filme " +
+                "WHERE fa.id_usuario = ? " +
+                "ORDER BY fa.data_assistido DESC";
+
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, usuarioId);
+
+            ResultSet rs = ps.executeQuery();
+
+            int contador = 0;
+            while (rs.next()) {
+                String nomeFilme = rs.getString("filme");
+                String dataAssistido = rs.getString("data_assistido");
+
+                FilmeAssistido filme = new FilmeAssistido(nomeUsuario, nomeFilme, dataAssistido);
+
+                lista.add(filme);
+                contador++;
+            }
+
+            System.out.println("Encontrados " + contador + " filmes assistidos para " + nomeUsuario);
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar filmes assistidos: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return lista;
     }
 
-    return lista;
-}
+    private void removerDaWatchlist(int usuarioId, int filmeId) {
+        String sql = "DELETE FROM watchlist WHERE id_usuario = ? AND id_filme = ?";
+
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, usuarioId);
+            ps.setInt(2, filmeId);
+
+            int linhasRemovidas = ps.executeUpdate();
+
+            if (linhasRemovidas > 0) {
+                System.out.println("Filme removido automaticamente da sua watchlist!");
+            }
+
+            ps.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao remover da watchlist: " + e.getMessage());
+        }
+    }
 
 }

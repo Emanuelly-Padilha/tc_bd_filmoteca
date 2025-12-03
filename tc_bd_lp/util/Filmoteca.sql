@@ -17,7 +17,7 @@ CREATE TABLE filmes (
     ano INT NOT NULL,
     diretor VARCHAR(100),
     duracao INT,
-    classificacao VARCHAR(10)
+    classificacao VARCHAR(50)
 );
 
 CREATE TABLE avaliacoes (

@@ -15,4 +15,8 @@ public class WatchlistController {
     public List<Watchlist> listar(String nomeUsuario) {
         return dao.listarPorUsuario(nomeUsuario);
     }
+
+    public void remover(Watchlist w) {
+        dao.remover(w);
+    }
 }
