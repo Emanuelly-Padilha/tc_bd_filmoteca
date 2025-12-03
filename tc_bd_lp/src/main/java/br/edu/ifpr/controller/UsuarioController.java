@@ -14,7 +14,7 @@ public class UsuarioController {
     }
 
     public List<Usuario> listar() {
-        return dao.listar();
+        return dao.listarTodos();
     }
 
     public  Usuario login(String email, String senha) {
