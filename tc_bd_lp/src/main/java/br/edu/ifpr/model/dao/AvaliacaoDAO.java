@@ -77,4 +77,78 @@ public class AvaliacaoDAO {
         return lista;
 
     }
+    public void remover(String nomeUsuario, String nomeFilme) {
+   
+    Usuario usuario = usuarioDAO.buscarPorNome(nomeUsuario);
+    if (usuario == null) {
+        System.out.println("Erro: Usuário não encontrado: " + nomeUsuario);
+        return;
+    }
+    
+    int filmeId = filmeDAO.buscarIdPorTitulo(nomeFilme);
+    if (filmeId == -1) {
+        System.out.println("Erro: Filme não encontrado: " + nomeFilme);
+        return;
+    }
+    
+    String sql = "DELETE FROM avaliacoes WHERE id_usuario = ? AND id_filme = ?";
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, usuario.getId());
+        ps.setInt(2, filmeId);
+
+        int linhasRemovidas = ps.executeUpdate();
+
+        if (linhasRemovidas > 0) {
+            System.out.println("Avaliação removida com sucesso!");
+        } else {
+            System.out.println("Avaliação não encontrada.");
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Erro ao remover avaliação: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+public void atualizar(Avaliacao avaliacao) {
+   
+    Usuario usuario = usuarioDAO.buscarPorNome(avaliacao.getNomeUsuario());
+    if (usuario == null) {
+        System.out.println("Erro: Usuário não encontrado: " + avaliacao.getNomeUsuario());
+        return;
+    }
+    
+  
+    int filmeId = filmeDAO.buscarIdPorTitulo(avaliacao.getNomeFilme());
+    if (filmeId == -1) {
+        System.out.println("Erro: Filme não encontrado: " + avaliacao.getNomeFilme());
+        return;
+    }
+    
+    String sql = "UPDATE avaliacoes SET nota = ?, review = ? WHERE id_usuario = ? AND id_filme = ?";
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, avaliacao.getNota());
+        ps.setString(2, avaliacao.getReview());
+        ps.setInt(3, usuario.getId());
+        ps.setInt(4, filmeId);
+
+        int linhasAfetadas = ps.executeUpdate();
+
+        if (linhasAfetadas > 0) {
+            System.out.println("Avaliação atualizada com sucesso!");
+        } else {
+            System.out.println("Avaliação não encontrada para atualização.");
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Erro ao atualizar avaliação: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }

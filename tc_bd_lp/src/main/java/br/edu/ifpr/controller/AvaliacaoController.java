@@ -17,4 +17,12 @@ public class AvaliacaoController {
 
         return dao.listarPorUsuario(nomeUsuario);
     }
+
+    public void remover(String nomeUsuario, String nomeFilme) {
+        dao.remover(nomeUsuario, nomeFilme);
+    }
+
+      public void editar(Avaliacao avaliacao) {
+        dao.atualizar(avaliacao);
+    }
 }

@@ -181,7 +181,7 @@ public class Main {
             } else if (opcao == 2) {
                 removerUsuario();
             } else if (opcao != 0) {
-                System.out.println("Opção inválida! Digite 0 ou 1.");
+                System.out.println("Opção inválida! Digite 0, 1 ou 2.");
             }
 
         } while (opcao != 0);
@@ -457,7 +457,7 @@ public class Main {
                 case 0:
                     break;
                 default:
-                    System.out.println("Opção inválida! Digite 0, 1 ou 2.");
+                    System.out.println("Opção inválida! Digite 0, 1, 2 ou 3.");
             }
 
         } while (opcao != 0);
@@ -544,6 +544,8 @@ public class Main {
             System.out.println("\n=== MINHAS AVALIAÇÕES ===");
             System.out.println("1 - Avaliar um filme");
             System.out.println("2 - Listar avaliações");
+            System.out.println("3 - Remover avaliações");
+            System.out.println("4 - Editar  avaliações");
             System.out.println("0 - Voltar ao menu anterior");
             System.out.print("Escolha uma opção: ");
 
@@ -554,8 +556,12 @@ public class Main {
                 avaliarFilme();
             } else if (opcao == 2) {
                 listarMinhasAvaliacoes();
+            } else if (opcao == 3) {
+                removerAvaliacao();
+            } else if (opcao == 4) {
+                editarAvaliacao();
             } else if (opcao != 0) {
-                System.out.println("Opção inválida! Digite 0 ou 1.");
+                System.out.println("Opção inválida! Digite 0, 1, 2, 3 ou 4.");
             }
 
         } while (opcao != 0);
@@ -621,6 +627,157 @@ public class Main {
             }
 
             System.out.println("Total: " + minhasAvaliacoes.size() + " avaliação(ões)");
+        }
+    }
+
+    private static void removerAvaliacao() {
+        System.out.println("\n===  REMOVER AVALIAÇÃO === ");
+
+        List<Avaliacao> minhasAvaliacoes = avaliacaoController.listarPorUsuario(usuarioLogado.getNome());
+
+        if (minhasAvaliacoes.isEmpty()) {
+            System.out.println("Você não tem nenhuma avaliação para remover.");
+            return;
+        }
+
+        System.out.println("Suas avaliações:");
+        for (int i = 0; i < minhasAvaliacoes.size(); i++) {
+            Avaliacao av = minhasAvaliacoes.get(i);
+            System.out.println((i + 1) + " - Filme: " + av.getNomeFilme());
+            System.out.println("    Nota: " + av.getNota() + "/10");
+            System.out.println("    Opinião: " + av.getReview());
+            System.out.println("    ---");
+        }
+
+        System.out.print("\nDigite o número da avaliação que deseja remover: ");
+
+        try {
+            String entrada = sc.nextLine();
+            int opcao = Integer.parseInt(entrada);
+
+            if (opcao < 1 || opcao > minhasAvaliacoes.size()) {
+                System.out.println("Opção inválida! Escolha um número da lista.");
+                return;
+            }
+
+            Avaliacao avaliacaoSelecionada = minhasAvaliacoes.get(opcao - 1);
+            String nomeFilme = avaliacaoSelecionada.getNomeFilme();
+
+            System.out.println("\nVocê está prestes a remover sua avaliação do filme:");
+            System.out.println("Filme: " + nomeFilme);
+            System.out.println("Nota: " + avaliacaoSelecionada.getNota() + "/10");
+            System.out.println("Opinião: " + avaliacaoSelecionada.getReview());
+
+            System.out.print("\nTem certeza que deseja remover esta avaliação? (S/N): ");
+            String confirmacao = sc.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("S")) {
+                avaliacaoController.remover(usuarioLogado.getNome(), nomeFilme);
+            } else {
+                System.out.println("Operação cancelada.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro! Digite apenas números.");
+        }
+    }
+
+    private static void editarAvaliacao() {
+        System.out.println("\n===  EDITAR AVALIAÇÃO === ");
+
+        List<Avaliacao> minhasAvaliacoes = avaliacaoController.listarPorUsuario(usuarioLogado.getNome());
+
+        if (minhasAvaliacoes.isEmpty()) {
+            System.out.println("Você não tem nenhuma avaliação para editar.");
+            return;
+        }
+
+        System.out.println("Suas avaliações:");
+        for (int i = 0; i < minhasAvaliacoes.size(); i++) {
+            Avaliacao av = minhasAvaliacoes.get(i);
+            System.out.println((i + 1) + " - Filme: " + av.getNomeFilme());
+            System.out.println("    Nota atual: " + av.getNota() + "/10");
+            System.out.println("    Opinião atual: " + av.getReview());
+            System.out.println("    ---");
+        }
+
+        System.out.print("\nDigite o número da avaliação que deseja editar: ");
+
+        try {
+            String entrada = sc.nextLine();
+            int opcao = Integer.parseInt(entrada);
+
+            if (opcao < 1 || opcao > minhasAvaliacoes.size()) {
+                System.out.println("Opção inválida! Escolha um número da lista.");
+                return;
+            }
+
+            Avaliacao avaliacaoAntiga = minhasAvaliacoes.get(opcao - 1);
+            String nomeFilme = avaliacaoAntiga.getNomeFilme();
+
+            System.out.println("\nEditando avaliação do filme: " + nomeFilme);
+            System.out.println("Nota atual: " + avaliacaoAntiga.getNota() + "/10");
+            System.out.println("Opinião atual: " + avaliacaoAntiga.getReview());
+            System.out.println("----------------------------------------");
+
+            int novaNota;
+            while (true) {
+                System.out.print("Nova nota (1 a 10, ou 0 para manter a atual): ");
+                String notaStr = sc.nextLine();
+
+                if (notaStr.trim().isEmpty() || notaStr.equals("0")) {
+                    novaNota = avaliacaoAntiga.getNota();
+                    System.out.println("Manter nota atual: " + novaNota);
+                    break;
+                }
+
+                try {
+                    novaNota = Integer.parseInt(notaStr);
+                    if (novaNota >= 1 && novaNota <= 10) {
+                        break;
+                    } else {
+                        System.out.println("Nota inválida! Digite um número entre 1 e 10.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Entrada inválida! Digite um número.");
+                }
+            }
+
+            System.out.println("\nOpinião atual: " + avaliacaoAntiga.getReview());
+            System.out.print("Nova opinião (pressione ENTER para manter a atual): ");
+            String novaReview = sc.nextLine();
+
+            if (novaReview.trim().isEmpty()) {
+                novaReview = avaliacaoAntiga.getReview();
+                System.out.println("Manter opinião atual.");
+            }
+
+            System.out.println("\n===  RESUMO DAS ALTERAÇÕES === ");
+            System.out.println("Filme: " + nomeFilme);
+            System.out.println("Nota: " + avaliacaoAntiga.getNota() + " → " + novaNota);
+            System.out.println("Opinião: " + avaliacaoAntiga.getReview());
+            System.out.println("         ↓");
+            System.out.println("         " + novaReview);
+
+            System.out.print("\nConfirmar alterações? (S/N): ");
+            String confirmacao = sc.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("S")) {
+
+                Avaliacao avaliacaoAtualizada = new Avaliacao(
+                        usuarioLogado.getNome(),
+                        nomeFilme,
+                        novaNota,
+                        novaReview);
+
+                avaliacaoController.editar(avaliacaoAtualizada);
+
+            } else {
+                System.out.println("Edição cancelada.");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Erro! Digite apenas números.");
         }
     }
 
